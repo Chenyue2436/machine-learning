@@ -1,6 +1,6 @@
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
-from models import Test, DLinear, SCINet, DLSNet, UNet, Resnet
+from models import Test, DLinear, SCINet, DLSNet, MLP, DMLP
 from utils.tools import EarlyStopping, adjust_learning_rate, visual
 from utils.metrics import metric
 import numpy as np
@@ -19,7 +19,7 @@ class Exp_Main(Exp_Basic):
         super(Exp_Main, self).__init__(args)
 
     def _build_model(self):
-        model_dict = {'Test': Test, 'DLinear': DLinear, 'SCINet': SCINet, 'DLSNet': DLSNet, 'UNet': UNet, 'Resnet': Resnet}
+        model_dict = {'Test': Test, 'DLinear': DLinear, 'SCINet': SCINet, 'DLSNet': DLSNet, 'MLP': MLP, 'DMLP': DMLP}
         model = model_dict[self.args.model].Model(self.args).float()
         if self.args.use_multi_gpu and self.args.use_gpu:
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
@@ -65,6 +65,11 @@ class Exp_Main(Exp_Basic):
         return total_loss
 
     def train(self, setting):
+#         # loss可视化
+#         train_loss_cy = []
+#         vali_loss_cy = []
+#         test_loss_cy = []
+        
         train_data, train_loader = self._get_data(flag='train')
         vali_data, vali_loader = self._get_data(flag='val')
         test_data, test_loader = self._get_data(flag='test')
@@ -104,6 +109,12 @@ class Exp_Main(Exp_Basic):
             vali_loss = self.vali(vali_data, vali_loader, criterion)
             test_loss = self.vali(test_data, test_loader, criterion)
             print("Epoch: {0} | Train Loss: {1:.7f} Vali Loss: {2:.7f} Test Loss: {3:.7f}".format(epoch + 1, train_loss, vali_loss, test_loss))
+            
+#             # loss可视化
+#             train_loss_cy.append(train_loss)
+#             vali_loss_cy.append(vali_loss)
+#             test_loss_cy.append(test_loss)
+            
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
@@ -111,6 +122,15 @@ class Exp_Main(Exp_Basic):
             adjust_learning_rate(model_optim, epoch + 1, self.args)
         best_model_path = path + '/' + 'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
+
+#         # loss可视化
+#         plt.figure()
+#         plt.plot(train_loss_cy, label = 'train_loss', linewidth = 2)
+#         plt.plot(vali_loss_cy, label = 'vali_loss', linewidth = 2)
+#         plt.plot(test_loss_cy, label = 'test_loss', linewidth = 2)
+#         plt.legend()
+#         plt.savefig(self.args.model_id + '_loss', bbox_inches='tight')
+        
         return self.model
 
     def test(self, setting):

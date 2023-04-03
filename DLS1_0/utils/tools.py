@@ -41,6 +41,8 @@ def adjust_learning_rate(optimizer, epoch, args):
         }
     elif args.lradj == '3':
         lr_adjust = {epoch: args.learning_rate * (0.995 ** ((epoch - 1) // 1))}
+    elif args.lradj == '4':
+        lr_adjust = {epoch: args.learning_rate * (0.9 ** ((epoch - 1) // 1))}
     if epoch in lr_adjust.keys():
         lr = lr_adjust[epoch]
         for param_group in optimizer.param_groups:
