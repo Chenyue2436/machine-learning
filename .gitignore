@@ -1,0 +1,10 @@
+/*
+!README.md
+!.gitignore
+!/DLS1_0
+DLS1_0/test_results/
+DLS1_0/datasets/
+*.pth
+*.csv
+*.pyc
+*.ipynb
