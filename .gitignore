@@ -1,9 +1,6 @@
-/*
-!README.md
-!.gitignore
-!/DLS1_0
-DLS1_0/test_results/
-DLS1_0/datasets/
+/other_model
+/test_results/
+/dataset/
 *.pth
 *.csv
 *.pyc
