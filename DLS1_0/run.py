@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description='Time Series Forecasting')
 
 # basic config
 parser.add_argument('--model_id', type=str, required=True, default='test', help='model id')
-parser.add_argument('--model', type=str, required=True, default='Test', help='model name, options: [Test, DLinear, SCINet, DLSNet, MLP, DMLP]')
+parser.add_argument('--model', type=str, required=True, default='MLP', help='model name, options: [Test, DLinear, SCINet, DLSNet, MLP, DMLP, MLPN]')
 parser.add_argument('--data', type=str, required=True, default='ETTm2', help='dataset type')
 parser.add_argument('--moving_avg', type=int, default=24, help='Window size of moving average')
 

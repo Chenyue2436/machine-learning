@@ -56,15 +56,13 @@ class Model(nn.Module):
         self.revin = configs.revin
         
         self.revin_layer = RevIN(self.feature_dim)
-        self.Linear = MLP(self.seq_len, self.s)
-        self.projection = nn.Linear(self.seq_len, self.pred_len)
+        self.Linear = nn.Sequential(MLP(self.seq_len, self.s), nn.Linear(self.seq_len, self.pred_len))
         
     def forward(self, x):# [Batch, Input length, Channel]
         if self.revin:
             x = self.revin_layer(x, 'norm')
         x = x.permute(0, 2, 1)
         x = self.Linear(x)
-        x = self.projection(x)
         x = x.permute(0, 2, 1)
         if self.revin:
             x = self.revin_layer(x, 'denorm')
