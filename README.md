@@ -3,7 +3,7 @@
 
 First, please make sure you have installed Conda. Then, our environment can be installed by:
 ```
-conda create -n MLPDR python=3.10.9
+conda create -n MLPDR python=3.6.9
 conda activate MLPDR
 pip install -r requirements.txt
 ```
